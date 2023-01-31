@@ -1,3 +1,8 @@
+//A lot of the current code was for testing the serial port. 
+//They will be changed slightly as we figure out how to recieve data from both spi and serial and what will take precedence
+//Once SPI is figured out we will also see how writing the new data to the routers will look. 
+//@RAY the states at the bottom describing changes to the routing table struct need to be made rn
+
 #include <stdint.h>
 #include <SPI.h>
 

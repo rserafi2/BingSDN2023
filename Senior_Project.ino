@@ -9,27 +9,27 @@
 #define ROUTING_TABLE_SIZE 32
 #define MAX_ROUTERS 8
 
-struct routingTableEntry
+typedef struct RoutingTableEntry
 {
   long IPSrc;
   long IPDest;
   long mask;
   _Bool accessBit;
   uint8_t portNum;
-};
+} RoutingTableEntry;
 
-struct router
+typedef struct Router
 {
   uint8_t id;
-  struct routingTableEntry routingTable[ROUTING_TABLE_SIZE]; //Can be a linked list later on
-};
+  RoutingTableEntry routingTable[ROUTING_TABLE_SIZE]; //Can be a linked list later on
+} Router;
 
 enum Program_State {STARTUP,WAIT,READ_SPI,READ_SERIAL,SET_ACCESS,DISPLAY_TABLE,NEW_IP,NEW_ROUTER,WRITE_TABLE};
 char charCommand[128]; // for incoming serial data
 String command;
 char *token;
 const char *delimiter = " ";
-struct router routerList[MAX_ROUTERS];
+Router routerList[MAX_ROUTERS];
 
 void setup() {
   pinMode(10, OUTPUT); 

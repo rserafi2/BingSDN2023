@@ -1,35 +1,30 @@
-//A lot of the current code was for testing the serial port. 
-//They will be changed slightly as we figure out how to recieve data from both spi and serial and what will take precedence
-//Once SPI is figured out we will also see how writing the new data to the routers will look. 
-//@RAY the states at the bottom describing changes to the routing table struct need to be made rn
-
 #include <stdint.h>
 #include <SPI.h>
 
 #define ROUTING_TABLE_SIZE 32
 #define MAX_ROUTERS 8
 
-typedef struct RoutingTableEntry
+struct routingTableEntry
 {
   long IPSrc;
   long IPDest;
   long mask;
   _Bool accessBit;
   uint8_t portNum;
-} RoutingTableEntry;
+};
 
-typedef struct Router
+struct router
 {
   uint8_t id;
-  RoutingTableEntry routingTable[ROUTING_TABLE_SIZE]; //Can be a linked list later on
-} Router;
+  struct routingTableEntry routingTable[ROUTING_TABLE_SIZE]; //Can be a linked list later on
+};
 
-enum Program_State {STARTUP,WAIT,READ_SPI,READ_SERIAL,SET_ACCESS,DISPLAY_TABLE,NEW_IP,NEW_ROUTER,WRITE_TABLE};
+enum Program_State {STARTUP,WAIT,PING_SPI,READ_SPI,CHECK_SPI_COMMAND,READ_SERIAL,SET_ACCESS,DISPLAY_TABLE,NEW_IP,NEW_ROUTER,WRITE_TABLE};
 char charCommand[128]; // for incoming serial data
 String command;
 char *token;
 const char *delimiter = " ";
-Router routerList[MAX_ROUTERS];
+struct router routerList[MAX_ROUTERS];
 
 void setup() {
   pinMode(10, OUTPUT); 
@@ -46,13 +41,27 @@ void loop() {
     break;
     case WAIT:
       if (Serial.available() > 0){
-        //Serial.println("READ SERIAL STATE");
         state = READ_SERIAL;
       }
-      else if( /* SPI DATA was sent*/){
-        //Serial.println("READ SPI STATE");
-        state = READ_SPI
-      }
+      else if
+        //waiting counter reaches WAIT_TIME, go to PING_SPI
+      else
+        //check wait again
+    break;
+    case PING_SPI:
+      //send a blank message over to check if ARTY has sent a message
+      //if there is a message move to read SPI and finish reading message
+      //if no message return to wait
+    break;
+    case READ_SPI:
+      //save SPI bytes in buffer until end of message
+      //go to check SPI command
+    break;
+    case CHECK_SPI_COMMAND:
+      //check opcode of SPI message
+      if(//opcode is 0, go to ROUTER_STARTUP)
+      else if(//opcode is 1, go to NEW_IP)
+      else (//there must have been an error and go back to wait. Write to serial saying there was an error)
     break;
     case READ_SERIAL:
       command = Serial.readString();
@@ -88,10 +97,6 @@ void loop() {
     break;
     case DISPLAY_TABLE:
       //TODO: write the entire routing table to the serial port
-    break;
-    case READ_SPI:
-      //TODO: FIX THIS with abe
-      state = WAIT;
     break;
     case NEW_IP:
       //TODO: read in table entry info into registers and save it all in a routingTableEntry and add to routingTable

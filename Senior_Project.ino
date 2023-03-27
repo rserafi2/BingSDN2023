@@ -111,7 +111,7 @@ void loop() {
           portUsed = String(token).toInt();
           token = strtok(NULL,delimiter);
         }
-        state = DISPLAY_TABLE;
+        state = DISPLAY_TABLE_ENTRY;
       }
       else{
         Serial.println("Unknown Command");
@@ -120,7 +120,7 @@ void loop() {
       }
     break;
       
-    case SET_SECBIT:
+    case SET_ACCESS:
     for (RID = ){
       for (int j = 0; j < ROUTING_TABLE_SIZE; j++){
         for (routerList[RID}.routingTable[j].MACSrc = MACSrc && routerList[RID}.routingTable[j].MACDest = MACDest){

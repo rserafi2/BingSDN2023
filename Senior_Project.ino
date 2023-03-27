@@ -17,11 +17,11 @@ struct RoutingTableEntry{
 struct router
 {
   uint8_t id;
-  struct routingTableEntry routingTable[ROUTING_TABLE_SIZE]; //Can be a linked list later on
+  struct routingTableEntry routingTable[ROUTING_TABLE_SIZE]; 
 };
 
 enum Program_State {STARTUP,WAIT,PING_SPI,READ_SPI,CHECK_SPI_COMMAND,READ_SERIAL,SET_ACCESS,DISPLAY_TABLE_ENTRY,WRITE_SERIAL,NEW_IP,NEW_ROUTER,WRITE_TABLE};
-char charCommand[128]; // for incoming serial data
+char charCommand[128]; 
 String command;
 char *token;
 const char *delimiter = " ";
@@ -30,7 +30,6 @@ struct router routerList[MAX_ROUTERS];
 void setup() {
   pinMode(10, OUTPUT); 
   Serial.begin(9600); // opens serial port, sets data rate to 9600 bps
-}
 
 void loop() {
   static enum Program_State state = WAIT;
@@ -41,13 +40,13 @@ void loop() {
   case STARTUP:
     for (int i = 0; i < MAX_ROUTERS; i++){
       for int j = 0; j < ROUTING_TABLE_SIZE; j++){
-      routerList[i].routingTable[j].MACDest = 0;
-      routerList[i].routingTable[j].MACSrc = 0;
-      routerList[i].routingTable[j].IPDest = 0;
-      routerList[i].routingTable[j].IPSrc = 0;
-      routerList[i].routingTable[j].PortNum = 0;
-      routerList[i].routingTable[j].SecBit = 0;
-      routerList[i].routingTable[j].Valid = 0;
+        routerList[i].routingTable[j].MACDest = 0;
+        routerList[i].routingTable[j].MACSrc = 0;
+        routerList[i].routingTable[j].IPDest = 0;
+        routerList[i].routingTable[j].IPSrc = 0;
+        routerList[i].routingTable[j].PortNum = 0;
+        routerList[i].routingTable[j].SecBit = 0;
+        routerList[i].routingTable[j].Valid = 0;
       }
     }
     state = WAIT;

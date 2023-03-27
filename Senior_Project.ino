@@ -134,7 +134,7 @@ void loop() {
     break;
                        
     case DISPLAY_TABLE_ENTRY:
-      Serial.print("Display Table Entry At Specified Index");
+      Serial.println("Display Table Entry At Specified Index");
       Serial.print(routerList[j].routingTable[i].MacDest);
       Serial.print(" , ");
       Serial.print(routerList[j].routingTable[i].MacSrc);

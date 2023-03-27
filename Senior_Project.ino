@@ -4,7 +4,7 @@
 #define ROUTING_TABLE_SIZE 32
 #define MAX_ROUTERS 8
 
-struct RoutingTableEntry{
+struct routingTableEntry{
   long MACDes;
   long MACSrc;
   long IPDest;

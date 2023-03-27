@@ -121,11 +121,11 @@ void loop() {
     break;
       
     case SET_ACCESS:
-    for (RID = ){
+    for (id = ){
       for (int j = 0; j < ROUTING_TABLE_SIZE; j++){
-        for (routerList[RID].routingTable[j].MACSrc = MACSrc && routerList[RID].routingTable[j].MACDest = MACDest){
-          for (routerList[RID].routingTable[j].IPSrc = IPSrc && routerList[RID].routingTable[j].IPDest = IPDest){
-            routerList[RID].routingTable[j].SecBit = SecBit;
+        for (routerList[id].routingTable[j].MACSrc = MACSrc && routerList[id].routingTable[j].MACDest = MACDest){
+          for (routerList[id].routingTable[j].IPSrc = IPSrc && routerList[id].routingTable[j].IPDest = IPDest){
+            routerList[id].routingTable[j].SecBit = SecBit;
           }
         }
       }

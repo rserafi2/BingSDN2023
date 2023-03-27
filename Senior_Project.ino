@@ -5,8 +5,8 @@
 #define MAX_ROUTERS 8
 
 struct RoutingTableEntry{
-  long MACDes
-  long MACSrc
+  long MACDes;
+  long MACSrc;
   long IPDest;
   long IPSrc;
   uint8_t PortNum;
@@ -123,9 +123,9 @@ void loop() {
     case SET_ACCESS:
     for (RID = ){
       for (int j = 0; j < ROUTING_TABLE_SIZE; j++){
-        for (routerList[RID}.routingTable[j].MACSrc = MACSrc && routerList[RID}.routingTable[j].MACDest = MACDest){
-          for (routerList[RID}.routingTable[j].IPSrc = IPSrc && routerList[RID}.routingTable[j].IPDest = IPDest){
-            routerList[RID}.routingTable[j].SecBit = SecBit;
+        for (routerList[RID].routingTable[j].MACSrc = MACSrc && routerList[RID].routingTable[j].MACDest = MACDest){
+          for (routerList[RID].routingTable[j].IPSrc = IPSrc && routerList[RID].routingTable[j].IPDest = IPDest){
+            routerList[RID].routingTable[j].SecBit = SecBit;
           }
         }
       }

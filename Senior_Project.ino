@@ -4,13 +4,14 @@
 #define ROUTING_TABLE_SIZE 32
 #define MAX_ROUTERS 8
 
-struct routingTableEntry
-{
-  long IPSrc;
+struct RoutingTableEntry{
+  long MACDes
+  long MACSrc
   long IPDest;
-  long mask;
-  _Bool accessBit;
-  uint8_t portNum;
+  long IPSrc;
+  uint8_t PortNum;
+  _Bool SecBit;
+  _Bool Valid;
 };
 
 struct router
@@ -19,7 +20,7 @@ struct router
   struct routingTableEntry routingTable[ROUTING_TABLE_SIZE]; //Can be a linked list later on
 };
 
-enum Program_State {STARTUP,WAIT,PING_SPI,READ_SPI,CHECK_SPI_COMMAND,READ_SERIAL,SET_ACCESS,DISPLAY_TABLE,NEW_IP,NEW_ROUTER,WRITE_TABLE};
+enum Program_State {STARTUP,WAIT,PING_SPI,READ_SPI,CHECK_SPI_COMMAND,READ_SERIAL,SET_ACCESS,DISPLAY_TABLE_ENTRY,WRITE_SERIAL,NEW_IP,NEW_ROUTER,WRITE_TABLE};
 char charCommand[128]; // for incoming serial data
 String command;
 char *token;
@@ -36,33 +37,60 @@ void loop() {
   //digitalWrite(10, portUsed);
   switch(state){
     default:
-    case STARTUP:
-      //state = WAIT;
-    break;
-    case WAIT:
-      if (Serial.available() > 0){
-        state = READ_SERIAL;
+      
+  case STARTUP:
+    for (int i = 0; i < MAX_ROUTERS; i++){
+      for int j = 0; j < ROUTING_TABLE_SIZE; j++){
+      routerList[i].routingTable[j].MACDest = 0;
+      routerList[i].routingTable[j].MACSrc = 0;
+      routerList[i].routingTable[j].IPDest = 0;
+      routerList[i].routingTable[j].IPSrc = 0;
+      routerList[i].routingTable[j].PortNum = 0;
+      routerList[i].routingTable[j].SecBit = 0;
+      routerList[i].routingTable[j].Valid = 0;
       }
-      else if
-        //waiting counter reaches WAIT_TIME, go to PING_SPI
-      else
-        //check wait again
+    }
+    state = WAIT;
     break;
+      
+    case WAIT:
+    if (Serial.available() > 0){
+      state = READ_SERIAL;
+    }
+    else if (Serial.available() = 0 && Wait_Counter != ){
+      state = WAIT;
+    }
+    else if (Wait_Counter = ){
+      state = PING_SPI;
+    }
+    else {
+      state = WAIT;
+    }
+    break;
+      
     case PING_SPI:
       //send a blank message over to check if ARTY has sent a message
       //if there is a message move to read SPI and finish reading message
       //if no message return to wait
     break;
+      
     case READ_SPI:
       //save SPI bytes in buffer until end of message
       //go to check SPI command
     break;
+      
     case CHECK_SPI_COMMAND:
-      //check opcode of SPI message
-      if(//opcode is 0, go to ROUTER_STARTUP)
-      else if(//opcode is 1, go to NEW_IP)
-      else (//there must have been an error and go back to wait. Write to serial saying there was an error)
+    if (OpCode = 0){
+      state = NEW_IP;
+    }
+    else if (OpCode = 1){
+      state = NEW_ROUTER;
+    }
+    else{
+      state = WAIT;
+    }
     break;
+        
     case READ_SERIAL:
       command = Serial.readString();
       command.toCharArray(charCommand,128);
@@ -92,18 +120,68 @@ void loop() {
         state = WAIT;
       }
     break;
-    case SET_ACCESS:
-      //TODO: write to table entry with ip matching and set access bit
+      
+    case SET_SECBIT:
+    for (RID = ){
+      for (int j = 0; j < ROUTING_TABLE_SIZE; j++){
+        for (routerList[RID}.routingTable[j].MACSrc = MACSrc && routerList[RID}.routingTable[j].MACDest = MACDest){
+          for (routerList[RID}.routingTable[j].IPSrc = IPSrc && routerList[RID}.routingTable[j].IPDest = IPDest){
+            routerList[RID}.routingTable[j].SecBit = SecBit;
+          }
+        }
+      }
+      state = WRITE_TABLE;
+    }
     break;
-    case DISPLAY_TABLE:
-      //TODO: write the entire routing table to the serial port
+                       
+    case DISPLAY_TABLE_ENTRY:
+      Serial.print("Display Table Entry At Specified Index");
+      Serial.print(routerList[j].routingTable[i].MacDest);
+      Serial.print(" , ");
+      Serial.print(routerList[j].routingTable[i].MacSrc);
+      Serial.print(" , ");
+      Serial.print(routerList[j].routingTable[i].IPDest);
+      Serial.print(" , ");
+      Serial.print(routerList[j].routingTable[i].IPSrc);
+      Serial.print(" , ");
+      Serial.print(routerList[j].routingTable[i].PortNum);
+      Serial.print(" , ");
+      Serial.print(routerList[j].routingTable[i].SecBit);
+      Serial.print(" , ");
+      Serial.println(routerList[j].routingTable[i].Valid);
+      state = WRITE_SERIAL;
     break;
+                    
+    case WRITE_SERIAL:
+    Serial.println("Printing Routing Table to Serial Terminal");
+    for (int j = 0; j < MAX_ROUTERS; j++){
+      for ( int i = 0; i < ROUTING_TABLE_SIZE; i++){
+        Serial.print(routerList[j].routingTable[i].MacDest);
+        Serial.print(" , ");
+        Serial.print(routerList[j].routingTable[i].MacSrc);
+        Serial.print(" , ");
+        Serial.print(routerList[j].routingTable[i].IPDest);
+        Serial.print(" , ");
+        Serial.print(routerList[j].routingTable[i].IPSrc);
+        Serial.print(" , ");
+        Serial.print(routerList[j].routingTable[i].PortNum);
+        Serial.print(" , ");
+        Serial.print(routerList[j].routingTable[i].SecBit);
+        Serial.print(" , ");
+        Serial.println(routerList[j].routingTable[i].Valid);
+      }
+    }
+    state = WAIT;
+    break;
+                       
     case NEW_IP:
-      //TODO: read in table entry info into registers and save it all in a routingTableEntry and add to routingTable
+      state = WRITE_TABLE;
     break;
+                       
     case NEW_ROUTER:
       //TODO: reads in router ID of 0, assignes new router ID to router, sends back a blank routing table
     break;
+                       
     case WRITE_TABLE:
       //TODO: writes over table in controller and then sends out table info to router
     break;

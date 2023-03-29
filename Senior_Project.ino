@@ -71,6 +71,12 @@ void loop() {
       //send a blank message over to check if ARTY has sent a message
       //if there is a message move to read SPI and finish reading message
       //if no message return to wait
+      if  (Serial.available() > 0){
+        state = READ_SPI;
+      }
+      else{
+        state = WAIT;
+      }
     break;
       
     case READ_SPI:
@@ -179,6 +185,7 @@ void loop() {
                        
     case NEW_ROUTER:
       //TODO: reads in router ID of 0, assignes new router ID to router, sends back a blank routing table
+      state = WAIT;
     break;
                        
     case WRITE_TABLE:

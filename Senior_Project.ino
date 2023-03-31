@@ -277,3 +277,99 @@ void loop() {
 //    }
 //  }
 }
+
+/* Setting Table Values Individually Backup
+    case READ_SERIAL:
+    Serial.println("STATE = READ_SERIAL");
+      command = Serial.readString();
+      command.toCharArray(charCommand,128);
+      token = strtok(charCommand,delimiter);
+      //Serial.println(token);
+      if(String(token).equals("ReadTableEntry")){
+        state = DISPLAY_TABLE_ENTRY;
+      }
+      else if(String(token).equals("SetMACDestination")){
+        state = SET_MAC_DESTINATION;
+      }
+      else if(String(token).equals("SetMACSource")){
+        state = SET_MAC_SOURCE;
+      }      
+      else if(String(token).equals("SetIPDestination")){
+        state = SET_IP_DESTINATION;
+      }
+      else if(String(token).equals("SetIPSource")){
+        state = SET_IP_SOURCE;
+      }
+      else if(String(token).equals("SetPortNumber")){
+        state = SET_PORT_NUMBER;
+      }
+      else if(String(token).equals("SetSecurityBit")){
+        state = SET_ACCESS;
+      }
+      else if(String(token).equals("SetValid")){
+        state = SET_VALID;
+      }
+      else{
+        Serial.println("Unknown Command");
+        state = WAIT;
+      }
+    break;
+    
+    case SET_MAC_DESTINATION:
+    Serial.println("STATE = SET_MAC_DESTINATION");
+    tableIndex = (uint8_t)atoi(strtok(NULL,delimiter));
+    securityBit = (uint8_t)atoi(strtok(NULL,delimiter));
+    routerList[0].routingTable[tableIndex].MACDest = ;
+    state = WRITE_TABLE;
+    break;
+    
+    case SET_MAC_SOURCE:
+    Serial.println("STATE = SESET_MAC_SOURCE");
+    tableIndex = (uint8_t)atoi(strtok(NULL,delimiter));
+    securityBit = (uint8_t)atoi(strtok(NULL,delimiter));
+    routerList[0].routingTable[tableIndex].MACSrc = ;
+    state = WRITE_TABLE;
+    break;
+    
+    case SET_IP_DESTINATION:
+    Serial.println("STATE = SET_IP_DESTINATION");
+    tableIndex = (uint8_t)atoi(strtok(NULL,delimiter));
+    securityBit = (uint8_t)atoi(strtok(NULL,delimiter));
+    routerList[0].routingTable[tableIndex].IPDest = ;
+    state = WRITE_TABLE;
+    break;
+    
+    case SET_IP_SOURCE:
+    Serial.println("STATE = SET_IP_SOURCE");
+    tableIndex = (uint8_t)atoi(strtok(NULL,delimiter));
+    securityBit = (uint8_t)atoi(strtok(NULL,delimiter));
+    routerList[0].routingTable[tableIndex].IPSrc = ;
+    state = WRITE_TABLE;
+    break;
+    
+    case SET_PORT_NUMBER:
+    Serial.println("STATE = SET_PORT_NUMBER");
+    tableIndex = (uint8_t)atoi(strtok(NULL,delimiter));
+    securityBit = (uint8_t)atoi(strtok(NULL,delimiter));
+    routerList[0].routingTable[tableIndex].PortNum = ;
+    state = WRITE_TABLE;
+    break;
+    
+    case SET_ACCESS:
+    Serial.println("STATE = SET_ACCESS");
+    tableIndex = (uint8_t)atoi(strtok(NULL,delimiter));
+    securityBit = (uint8_t)atoi(strtok(NULL,delimiter));
+    routerList[0].routingTable[tableIndex].SecBit = securityBit;
+    state = WRITE_TABLE;
+    break;
+    
+    case SET_VALID:
+    Serial.println("STATE = SET_VALID");
+    tableIndex = (uint8_t)atoi(strtok(NULL,delimiter));
+    securityBit = (uint8_t)atoi(strtok(NULL,delimiter));
+    routerList[0].routingTable[tableIndex].Valid = ;
+    state = WRITE_TABLE;
+    break;
+    */
+
+    

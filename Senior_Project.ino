@@ -25,6 +25,7 @@ struct router
 };
 
 enum Program_State {STARTUP,WAIT,PING_SPI,
+DEBUG,
 READ_SPI,CHECK_SPI_COMMAND,
 READ_SERIAL,SET_ACCESS,SET_PORT,SET_VALID,DISPLAY_TABLE_ENTRY,WRITE_SERIAL,NEW_IP,NEW_ROUTER,WRITE_TABLE};
 
@@ -140,10 +141,10 @@ static enum Program_State state = STARTUP;
 void loop() {
   
   switch(state){
-  default:
+  
       
   case STARTUP:
-  //Serial.println("STATE = STARTUP");
+    Serial.println("STATE = STARTUP");
     for (int i = 0; i < MAX_ROUTERS; i++){
       for( int j = 0; j < ROUTING_TABLE_SIZE; j++){
         routerList[i].routingTable[j].MACDest = 0;
@@ -157,7 +158,7 @@ void loop() {
     }
     state = WAIT;
     break;
-      
+    default:  
     case WAIT:
     //Serial.println("STATE = WAIT");
     if (Serial.available() > 0){
@@ -224,6 +225,9 @@ void loop() {
       else if(String(token).equals("SetValid")){
         state = SET_VALID;
       }
+      else if(String(token).equals("DEBUG")){
+        state = DEBUG;
+      }
       else{
         Serial.println("Unknown Command");
         //Serial.println("WAIT STATE");
@@ -264,6 +268,39 @@ void loop() {
     valid = (uint8_t)atoi(strtok(NULL,delimiter));
     routerList[0].routingTable[tableIndex].Valid = valid;
     state = WRITE_TABLE;
+    break;
+
+    case DEBUG:
+      Serial.println("STATE = DEBUG");
+      for(int i=0; i<6; i++){
+        Serial.println();
+        Serial.print("Table Entry At Index ");
+        Serial.println(i);
+        Serial.println("MACDest\t\t\tMACSrc\t\t\tIPDest\t\t\tIPSrc\t\t\tPortNum\tSecBit\tValid");
+        //Serial.print("MACDest ");
+        char mac_addr_str[20];
+        Serial.print(mac_uint64_to_str(routerList[0].routingTable[i].MACDest,mac_addr_str));
+        Serial.print("\t");
+        //Serial.print(" ,MACSrc ");
+        Serial.print(mac_uint64_to_str(routerList[0].routingTable[i].MACSrc,mac_addr_str));
+        Serial.print("\t");
+        //Serial.print(" ,IPDest ");
+        char ip_addr_str[16];
+        Serial.print(ip_uint32_to_str(routerList[0].routingTable[i].IPDest,ip_addr_str));
+        Serial.print("\t\t");
+        //Serial.print(" ,IPSrc ");
+        Serial.print(ip_uint32_to_str(routerList[0].routingTable[i].IPSrc,ip_addr_str));
+        Serial.print("\t\t");
+        //Serial.print(" ,PortNum ");
+        Serial.print(routerList[0].routingTable[i].PortNum);
+        Serial.print("\t");
+        //Serial.print(" ,SecBit ");
+        Serial.print(routerList[0].routingTable[i].SecBit);
+        Serial.print("\t");
+        //Serial.print(" ,Valid ");
+        Serial.println(routerList[0].routingTable[tableIndex].Valid);
+      }
+    state = WAIT;
     break;
         
     case DISPLAY_TABLE_ENTRY:

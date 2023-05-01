@@ -298,7 +298,7 @@ void loop() {
         Serial.print(routerList[0].routingTable[i].SecBit);
         Serial.print("\t");
         //Serial.print(" ,Valid ");
-        Serial.println(routerList[0].routingTable[tableIndex].Valid);
+        Serial.println(routerList[0].routingTable[i].Valid);
       }
     state = WAIT;
     break;

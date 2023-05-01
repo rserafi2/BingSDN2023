@@ -1,3 +1,8 @@
+//SDN Controller Code - creates a terminal for users to read/write to routing table of SDN switch/router through SPI
+//ECD307 Team Members: Ryan Serafin, Abraham Farrell, Raymond Chen, Grace Moon
+//Binghamton University EECE 488 Professor: Meghana Jain, TAs: Matthew Doolittle, Maryam Rezaie
+//Advisor: Dr. Yu Chen, Industry Advisors: Thomas Gaska, Mohd Khan
+
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
@@ -8,8 +13,6 @@
 #define MAX_ROUTERS 1
 #define WAIT_TIME 100
 struct routingTableEntry{
-  //uint32_t MACDestTop;
-  //uint16_t MACDestBottom;//TODO: MY EYEYEYSS
   uint64_t MACDest;
   uint64_t MACSrc;
   uint32_t IPDest;
@@ -141,7 +144,6 @@ static enum Program_State state = STARTUP;
 void loop() {
   
   switch(state){
-  
       
   case STARTUP:
     Serial.println("STATE = STARTUP");
@@ -161,7 +163,7 @@ void loop() {
     default:  
     case WAIT:
     //Serial.println("STATE = WAIT");
-    if (Serial.available() > 0){
+    if (Serial.available() > 0){//Prioritizes controller commands over router requests
       waitCount = 0;
       state = READ_SERIAL;
     }
@@ -270,7 +272,8 @@ void loop() {
     state = WRITE_TABLE;
     break;
 
-    case DEBUG:
+    case DEBUG: //prints out the routing table currently on the controller without reading from the routing table. 
+                //Basically turned into what the Write_Serial state should be
       Serial.println("STATE = DEBUG");
       for(int i=0; i<6; i++){
         Serial.println();
@@ -383,6 +386,7 @@ void loop() {
                        
     case NEW_IP:
       Serial.println("STATE = NEW_IP");
+      //TODO: reads in new packet ip not on table and decides what to do with it. Ex. adds to routing table
       state = WRITE_TABLE;
     break;
                        
@@ -416,11 +420,7 @@ void loop() {
       SPIbyte(0xff&((routerList[0].routingTable[tableIndex].MACDest)>>(i*8)));
       //Serial.println((uint8_t)(0xff&((routerList[0].routingTable[tableIndex].MACDest)>>((6-i-1)*8))));
       }
-      Serial.println("Write Complete");
-      
-      
-      
-      
+      Serial.println("Write Complete");      
       /*Serial.println((uint8_t)(0x0f&((routerList[0].routingTable[tableIndex].PortNum&0x03)<<2)|
                     ((routerList[0].routingTable[tableIndex].SecBit&0x01)<<1)|
                     (routerList[0].routingTable[tableIndex].Valid&0x01)));*/
@@ -428,17 +428,3 @@ void loop() {
       break;
   }
 }
-/*
-int main()
-{
-    //printf("c = %d\n", hex_char_to_uint8('c'));
-    printf("ab:cd:ef:ab:cd:ef = %lx\n", mac_str_to_uint64("ab:cd:ef:ab:cd:ef"));
-   
-    printf("100.100.100.100 = %x\n", ip_str_to_uint32("100.100.100.100"));
-    char ip_addr_str[16];
-    char mac_addr_str[20];
-    printf("0x64646464 = %s\n", ip_uint32_to_str(0x64646464, ip_addr_str));
-    printf("0xabcdefabcdef = %s\n", mac_uint64_to_str(0xabcdefabcdef, mac_addr_str));
-    return 0;
-}
-*/
